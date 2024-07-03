@@ -9,7 +9,7 @@ const SponsoredAds = ({ size }: { size: "sm" | "md" | "lg" }) => {
         <HiDotsHorizontal />
       </div>
       <div
-        className={`flex flex-col mt-4 ${size === "sm" ? "gap-p2" : "gap-4"}`}
+        className={`flex flex-col mt-4 ${size === "sm" ? "gap-2" : "gap-4"}`}
       >
         <div
           className={`relative w-full ${
