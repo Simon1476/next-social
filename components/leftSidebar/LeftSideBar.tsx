@@ -7,7 +7,7 @@ import { IoStorefront, IoListSharp } from "react-icons/io5";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
 import { BsNewspaper } from "react-icons/bs";
 import { IoMdSettings } from "react-icons/io";
-import SponsoredAds from "./SponsoredAds";
+import SponsoredAds from "../SponsoredAds";
 
 const LeftSideBar = ({ type }: { type: "home" | "profile" }) => {
   return (
