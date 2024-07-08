@@ -1,7 +1,7 @@
-import Feed from "@/components/Feed";
-import LeftSideBar from "@/components/LeftSideBar";
+import Feed from "@/components/feed/Feed";
+import LeftSideBar from "@/components/leftSidebar/LeftSideBar";
 import PostComposer from "@/components/PostComposer";
-import RightSideBar from "@/components/RightSideBar";
+import RightSideBar from "@/components/rightSidebar/RightSideBar";
 import UserStorties from "@/components/UserStorties";
 
 export default function Home() {
