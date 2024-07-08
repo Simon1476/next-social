@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { FaCheckCircle } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { FaCircleCheck } from "react-icons/fa6";
 
