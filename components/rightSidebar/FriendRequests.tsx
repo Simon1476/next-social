@@ -1,10 +1,24 @@
-import Image from "next/image";
 import Link from "next/link";
 
-import { MdCancel } from "react-icons/md";
-import { FaCircleCheck } from "react-icons/fa6";
+import { auth } from "@clerk/nextjs/server";
+import prisma from "@/lib/client";
+import FriendRequestList from "./FriendRequestList";
 
-const FriendRequests = () => {
+const FriendRequests = async () => {
+  const { userId } = auth();
+
+  if (!userId) return null;
+
+  const requests = await prisma.followRequest.findMany({
+    where: {
+      receiverId: userId,
+    },
+    include: {
+      sender: true,
+    },
+  });
+
+  if (requests.length === 0) return null;
   return (
     <div className="p-4 bg-white rounded-lg shadow-md text-sm space-y-4">
       <div className="flex justify-between items-center">
@@ -13,54 +27,7 @@ const FriendRequests = () => {
           See all
         </Link>
       </div>
-      <div className="flex justify-between items-center">
-        <div className="flex  items-center gap-4">
-          <Image
-            src="https://images.pexels.com/photos/25578495/pexels-photo-25578495.jpeg?auto=compress&cs=tinysrgb&w=300&lazy=load"
-            alt=""
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <span className="font-semibold">Emma Davis</span>
-        </div>
-        <div className="flex gap-3 items-center">
-          <FaCircleCheck size={18} />
-          <MdCancel size={20} />
-        </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex  items-center gap-4">
-          <Image
-            src="https://images.pexels.com/photos/25578495/pexels-photo-25578495.jpeg?auto=compress&cs=tinysrgb&w=300&lazy=load"
-            alt=""
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <span className="font-semibold">Emma Davis</span>
-        </div>
-        <div className="flex gap-3 items-center">
-          <FaCircleCheck size={18} />
-          <MdCancel size={20} />
-        </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex  items-center gap-4">
-          <Image
-            src="https://images.pexels.com/photos/25578495/pexels-photo-25578495.jpeg?auto=compress&cs=tinysrgb&w=300&lazy=load"
-            alt=""
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <span className="font-semibold">Emma Davis</span>
-        </div>
-        <div className="flex gap-3 items-center">
-          <FaCircleCheck size={18} />
-          <MdCancel size={20} />
-        </div>
-      </div>
+      <FriendRequestList requests={requests} />
     </div>
   );
 };
