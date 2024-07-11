@@ -7,6 +7,7 @@ import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
 import { IoMdSchool, IoIosLink } from "react-icons/io";
 import { IoBagRemove } from "react-icons/io5";
 import UserInfoCardInteraction from "./UserInfoCardInteraction";
+import UpdateUser from "./UpdateUser";
 
 const UserInfoCard = async ({ user }: { user: User }) => {
   const createdAtDate = new Date(user.createdAt);
@@ -55,15 +56,18 @@ const UserInfoCard = async ({ user }: { user: User }) => {
     <div className="p-4 bg-white rounded-lg shadow-md text-sm space-y-4">
       <div className="flex justify-between items-center">
         <span className="text-gray-500">User Information</span>
-        <Link href="/" className="text-blue-500 text-xs font-semibold">
-          See all
-        </Link>
+        {currentUserId === user.id ? (
+          <UpdateUser user={user} />
+        ) : (
+          <Link href="/" className="text-blue-500 text-xs font-semibold">
+            See all
+          </Link>
+        )}
       </div>
       {/* BOTTOM */}
       <div className="flex flex-col gap-4 text-gray-500">
         <div className="flex items-center gap-2">
           <span className="text-xl text-black">
-            {" "}
             {user.name && user.surname
               ? user.username + " " + user.surname
               : user.username}
@@ -114,10 +118,9 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             <span>Joined {formattedDate}</span>
           </div>
         </div>
-        {currentUserId && (
+        {currentUserId && currentUserId !== user.id && (
           <UserInfoCardInteraction
             userId={user.id}
-            currentUserId={currentUserId}
             isUserBlocked={isUserBlocked}
             isFollowing={isFollowing}
             isFollowingSent={isFollowingSent}
