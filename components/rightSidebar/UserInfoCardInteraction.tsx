@@ -11,7 +11,6 @@ type UserState = {
 
 type Props = {
   userId: string;
-
   isUserBlocked: boolean;
   isFollowing: boolean;
   isFollowingSent: boolean;
@@ -29,9 +28,22 @@ const UserInfoCardInteraction = ({
     followingRequestSent: isFollowingSent,
   });
 
+  const [optimisticState, switchOptimisticState] = useOptimistic(
+    userState,
+    (state, value: "follow" | "block") =>
+      value === "follow"
+        ? {
+            ...state,
+            following: state.following && false,
+            followingRequestSent:
+              !state.following && !state.followingRequestSent ? true : false,
+          }
+        : { ...state, blocked: !state.blocked }
+  );
+
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const follow = async () => {
+  const followAction = async () => {
     switchOptimisticState("follow");
     setIsProcessing(true);
     try {
@@ -49,7 +61,7 @@ const UserInfoCardInteraction = ({
     }
   };
 
-  const block = async () => {
+  const blockAction = async () => {
     switchOptimisticState("block");
     setIsProcessing(true);
     try {
@@ -66,22 +78,9 @@ const UserInfoCardInteraction = ({
     }
   };
 
-  const [optimisticState, switchOptimisticState] = useOptimistic(
-    userState,
-    (state, value: "follow" | "block") =>
-      value === "follow"
-        ? {
-            ...state,
-            following: state.following && false,
-            followingRequestSent:
-              !state.following && !state.followingRequestSent ? true : false,
-          }
-        : { ...state, blocked: !state.blocked }
-  );
-
   return (
     <>
-      <form action={follow}>
+      <form action={followAction}>
         <button
           disabled={isProcessing}
           className="w-full p-2 bg-blue-500 text-white text-sm rounded-md"
@@ -93,7 +92,7 @@ const UserInfoCardInteraction = ({
             : "Follow"}
         </button>
       </form>
-      <form action={block} className="self-end">
+      <form action={blockAction} className="self-end">
         <button disabled={isProcessing}>
           <span className="text-red-400 text-xs cursor-pointer">
             {optimisticState.blocked ? "Unblock User" : "Block User"}
