@@ -49,7 +49,7 @@ const Post = ({ post }: { post: FeedPostsType }) => {
         likes={post.likes.map((like) => like.userId)}
         commentNumber={post._count.comments}
       />
-      <Comments />
+      <Comments postId={post.id} />
     </div>
   );
 };
