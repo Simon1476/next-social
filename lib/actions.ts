@@ -259,7 +259,7 @@ export const addComment = async (postId: string, desc: string) => {
         user: true,
       },
     });
-
+    revalidatePath("/");
     return createdComment;
   } catch (error) {
     console.error("Failed to add comment:", error);

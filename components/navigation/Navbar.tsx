@@ -44,7 +44,7 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="search..."
-            className="bg-transparent outline-none"
+            className="px-4 py-2 bg-transparent outline-none"
           />
           <FaMagnifyingGlass />
         </div>
