@@ -240,3 +240,115 @@ export const toggleLikeStatus = async (postId: string) => {
     throw new Error("Failed to like post!");
   }
 };
+
+export const addComment = async (postId: string, desc: string) => {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User is not authenticated!");
+  }
+
+  try {
+    const createdComment = prisma.comment.create({
+      data: {
+        desc,
+        userId,
+        postId,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return createdComment;
+  } catch (error) {
+    console.error("Failed to add comment:", error);
+    throw new Error("Failed to add comment!");
+  }
+};
+
+export const addPost = async (formData: FormData, img: string) => {
+  const desc = formData.get("desc") as string;
+
+  const Desc = z.string().min(1).max(255);
+
+  const validatedDesc = Desc.safeParse(desc);
+
+  if (!validatedDesc.success) {
+    return;
+  }
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User is not authenticated!");
+  }
+
+  try {
+    await prisma.post.create({
+      data: {
+        desc: validatedDesc.data,
+        userId,
+        img,
+      },
+    });
+    revalidatePath("/");
+  } catch (error) {
+    console.error("Failed to create post:", error);
+    throw new Error("Failed to create post!");
+  }
+};
+
+export const addStory = async (img: string) => {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User is not authenticated!");
+  }
+
+  try {
+    const existingStory = await prisma.story.findFirst({
+      where: {
+        userId,
+      },
+    });
+
+    if (existingStory) {
+      await prisma.story.delete({
+        where: {
+          id: existingStory.id,
+        },
+      });
+    }
+
+    const createdStory = await prisma.story.create({
+      data: {
+        userId,
+        img,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      },
+      include: {
+        user: true,
+      },
+    });
+    return createdStory;
+  } catch (error) {
+    console.error("Failed to create post:", error);
+    throw new Error("Failed to create post!");
+  }
+};
+
+export const deletePost = async (postId: string) => {
+  const { userId } = auth();
+
+  if (!userId) throw new Error("User is not authenticated!");
+
+  try {
+    await prisma.post.delete({
+      where: {
+        id: postId,
+        userId,
+      },
+    });
+    revalidatePath("/");
+  } catch (error) {}
+};
