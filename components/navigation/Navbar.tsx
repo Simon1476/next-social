@@ -1,12 +1,10 @@
 import Link from "next/link";
 import MobileMenu from "./MobileMenu";
 
-import { FaHome, FaUserFriends } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { GiThreeFriends } from "react-icons/gi";
 import { CiCirclePlus } from "react-icons/ci";
 import { RiLoginBoxFill } from "react-icons/ri";
-import { AiOutlineMessage } from "react-icons/ai";
-import { IoIosNotificationsOutline } from "react-icons/io";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 import {
@@ -16,6 +14,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import Image from "next/image";
 
 const Navbar = () => {
   return (
@@ -62,10 +61,16 @@ const Navbar = () => {
         </ClerkLoading>
         <ClerkLoaded>
           <SignedIn>
-            <div className="hidden md:flex gap-4 cursor-pointer mr-4">
-              <FaUserFriends size={30} />
-              <AiOutlineMessage size={30} />
-              <IoIosNotificationsOutline size={30} />
+            <div className="hidden md:flex items-center gap-4 cursor-pointer mr-4">
+              <div className="cursor-pointer">
+                <Image src="/people.png" alt="" width={24} height={24} />
+              </div>
+              <div className="cursor-pointer">
+                <Image src="/messages.png" alt="" width={20} height={20} />
+              </div>
+              <div className="cursor-pointer">
+                <Image src="/notifications.png" alt="" width={20} height={20} />
+              </div>
             </div>
             <UserButton />
           </SignedIn>
