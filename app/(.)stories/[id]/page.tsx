@@ -1,4 +1,4 @@
-import ModalBackdrop from "@/components/ModalBackdrop";
+import ModalBackdrop from "../../../components/ModalBackdrop";
 import prisma from "@/lib/client";
 import Image from "next/image";
 
