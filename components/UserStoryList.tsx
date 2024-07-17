@@ -1,12 +1,15 @@
 "use client";
 
 import { addStory } from "@/lib/actions";
+
 import { useUser } from "@clerk/nextjs";
 import { Story, User } from "@prisma/client";
 import { CldUploadWidget } from "next-cloudinary";
+
 import Image from "next/image";
 import Link from "next/link";
-import { useOptimistic, useState } from "react";
+
+import { useState } from "react";
 
 type StoryWithUser = Story & {
   user: User;
@@ -16,41 +19,17 @@ const UserStoryList = ({ stories }: { stories: StoryWithUser[] }) => {
   const [storyList, setStoryList] = useState(stories);
   const [img, setImg] = useState<any>();
 
-  const { user, isLoaded } = useUser();
-
-  // const [optimisticStories, addOptimisticStory] = useOptimistic(
-  //   storyList,
-  //   (state, value: StoryWithUser) => [value, ...state]
-  // );
+  const { user } = useUser();
 
   const addStoryAction = async () => {
     if (!img?.secure_url) return;
 
-    // addOptimisticStory({
-    //   id: Math.random().toString(),
-    //   img: img.secure_url,
-    //   createdAt: new Date(Date.now()),
-    //   expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    //   userId: userId,
-    //   user: {
-    //     id: userId,
-    //     username: "Sending Plz...",
-    //     avatar: user?.imageUrl || "/noAvatar.png",
-    //     cover: "",
-    //     name: "",
-    //     surname: "",
-    //     description: "",
-    //     city: "",
-    //     school: "",
-    //     work: "",
-    //     website: "",
-    //     createdAt: new Date(Date.now()),
-    //   },
-    // });
-
     try {
       const createdStory = await addStory(img.secure_url);
-      setStoryList((prev) => [createdStory, ...prev]);
+      setStoryList((prev) => [
+        createdStory,
+        ...prev.filter((story) => story.userId !== user?.id),
+      ]);
       setImg(null);
     } catch (error) {}
   };
