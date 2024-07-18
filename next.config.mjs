@@ -26,13 +26,10 @@ const nextConfig = {
     ],
   },
   webpack: (config) => {
-    config.resolve.alias["@"] = path.join(__dirname, "src");
-    config.resolve.alias["@app"] = path.join(__dirname, "src/app");
-    config.resolve.alias["@components"] = path.join(
-      __dirname,
-      "src/components"
-    );
-    config.resolve.alias["@lib"] = path.join(__dirname, "src/lib");
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@": path.resolve(__dirname, "./src/"),
+    };
     return config;
   },
 };
